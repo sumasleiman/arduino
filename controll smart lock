@@ -1,0 +1,25 @@
+const int PIEZO_PIN = A0; // Piezo output
+int solenoidPin = 9;    //This is the output pin on the Arduino we are using
+char data = 0; 
+void setup() {
+Serial.begin(9600);
+pinMode(solenoidPin, OUTPUT);           //Sets the pin as an output
+}
+
+void loop() {
+  
+   if(Serial.available() > 0)      // Send data only when you receive data:
+   {
+      data = Serial.read();        //Read the incoming data & store into data
+      Serial.print(data);          //Print Value inside data in Serial monitor
+      Serial.print("\n");        
+      if(data == '1')              // Checks whether value of data is equal to 1
+         digitalWrite(solenoidPin, HIGH);   //If value is 1 then Solenoid turns ON
+      else if(data == '0')         //  Checks whether value of data is equal to 0
+         digitalWrite(solenoidPin, LOW);    //If value is 0 then Solenoid turns OFF
+      int piezoADC = analogRead(PIEZO_PIN);
+      float piezoV = piezoADC / 1023.0 * 5.0; //Maximum vibration strength to lock
+      Serial.println(piezoV);
+   }
+  }
+}
